@@ -1,9 +1,12 @@
-import { useColorScheme } from 'react-native'
 import { ClerkProvider } from '@clerk/expo'
 import { tokenCache } from '@clerk/expo/token-cache'
-import { DarkTheme, DefaultTheme, ThemeProvider, Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router'
+import { useColorScheme } from 'react-native'
 import 'react-native-reanimated'
+import '../../global.css'
+
+
+
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -15,14 +18,13 @@ export default function RootLayout() {
   const colorScheme = useColorScheme()
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-        <Stack>
-         
+    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+
         </Stack>
-        <StatusBar style="auto" />
-      </ClerkProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </ClerkProvider>
   )
 }
 

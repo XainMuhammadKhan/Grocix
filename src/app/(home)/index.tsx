@@ -1,8 +1,8 @@
 import { Show, useUser } from '@clerk/expo'
-import { UserButton, UserProfileView } from '@clerk/expo/native'
+import { UserProfileView } from '@clerk/expo/native'
 import { Link } from 'expo-router'
 import { StyleSheet, Text, View } from 'react-native'
-import { SignOutButton } from '../components/sign-out-button'
+
 
 export default function Page() {
     const { user } = useUser()
@@ -34,8 +34,6 @@ export default function Page() {
                         </Text>
 
                         <View style={styles.actions}>
-                            <UserButton />
-                            <SignOutButton />
                         </View>
                     </View>
 

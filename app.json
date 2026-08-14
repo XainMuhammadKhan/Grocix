@@ -21,7 +21,7 @@
       "package": "com.xain.k19.Grocix"
     },
     "web": {
-      "output": "static",
+      "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [

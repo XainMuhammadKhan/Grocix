@@ -1,6 +1,11 @@
 import { useSSO } from "@clerk/expo";
+import * as Linking from "expo-linking";
 import { useState } from "react";
 import { Alert } from "react-native";
+
+import * as WebBrowser from "expo-web-browser";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const useSocialAuth=()=>{
     const [loadingStrategy,setLoadingStrategy]=useState<string|null>(null);
@@ -14,7 +19,11 @@ const useSocialAuth=()=>{
             setLoadingStrategy(strategy)
 
             try {
-                const {createdSessionId, setActive} = await startSSOFlow({strategy})
+                const redirectUrl = Linking.createURL('/(auth)/sign-in');
+                const {createdSessionId, setActive} = await startSSOFlow({
+                    strategy,
+                    redirectUrl
+                })
 
                 if (!createdSessionId||!setActive) {
                     Alert.alert("Sign-in incomplete, Sign-in didnot complete. Please try again")

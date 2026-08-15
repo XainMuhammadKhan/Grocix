@@ -1,122 +1,69 @@
+import CompletedItems from '@/src/components/list/CompletedItems'
+import ListHeroCard from '@/src/components/list/ListHeroCard'
+import PendingItemCard from '@/src/components/list/PendingItemCard'
+import TabScreenBackground from '@/src/components/TabScreenBackground'
 import { useGroceryStore } from '@/src/store/grocery-store'
 import { Show, useUser } from '@clerk/expo'
 import { UserProfileView } from '@clerk/expo/native'
 import { Link } from 'expo-router'
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { ScrollView } from 'react-native-reanimated/lib/typescript/Animated'
 
 
-export default function Page() {
+export default function ListScreen() {
     const { user } = useUser()
+    const { items } = useGroceryStore();
+  const pendingItems = items.filter((item) => !item.purchased);
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Welcome!</Text>
-
-            <Show when="signed-out">
-                <View style={styles.authContainer}>
-                    <Link
-                        href="/(auth)/sign-in"
-                        style={styles.button}
-                    >
-                        Sign in
-                    </Link>
-
-
-                </View>
-            </Show>
-
-            <Show when="signed-in">
-                <View style={styles.signedInContainer}>
-
-                    {/* Header */}
-                    <View style={styles.header}>
-                        <Text style={styles.greeting}>
-                            Hello {user?.emailAddresses[0]?.emailAddress}
-                        </Text>
-
-                        <View style={styles.actions}>
-                        </View>
-                    </View>
-
-                    {/* Clerk Profile */}
-                    <View style={styles.profileContainer}>
-                        <UserProfileView
-                            isDismissible={false}
-                            style={styles.profile}
-                        />
-                    </View>
-
-                </View>
-            </Show>
+         <FlatList
+      className="flex-1 bg-background "
+      data={pendingItems}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => <PendingItemCard item={item} />}
+      contentContainerStyle={{ padding: 20, gap: 14 }}
+      contentInsetAdjustmentBehavior="automatic"
+      ListHeaderComponent={
+        <View style={{ gap: 14, paddingTop: 20 }}>
+          <TabScreenBackground />
+          <ListHeroCard />
+          <View className="flex-row items-center justify-between px-1">
+            <Text className="text-sm font-semibold uppercase tracking-[1px] text-muted-foreground">
+              Shopping items
+            </Text>
+            <Text className="text-sm text-muted-foreground">{pendingItems.length} active</Text>
+          </View>
         </View>
-    )
+      }
+      ListFooterComponent={<CompletedItems />}
+    />
+  );
 }
+    
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        gap: 16,
-        justifyContent: 'center',
-        backgroundColor: '#000',
-    },
 
-    title: {
-        fontSize: 32,
-        fontWeight: '700',
-        textAlign: 'center',
-        color: '#fff',
-    },
+// FIRST VERSION WITH ITEMS.MAP
+/*
+<ScrollView
+      className="flex-1 bg-background py-4"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ padding: 20, gap: 14 }}
+    >
+      <TabScreenBackground />
 
-    authContainer: {
-        gap: 12,
-    },
+      <ListHeroCard />
 
-    button: {
-        backgroundColor: '#0a7ea4',
-        color: '#fff',
-        paddingVertical: 14,
-        paddingHorizontal: 20,
-        borderRadius: 8,
-        textAlign: 'center',
-        fontSize: 16,
-        fontWeight: '600',
-        overflow: 'hidden',
-    },
+      <View className="flex-row items-center justify-between px-1">
+        <Text className="text-sm font-semibold uppercase tracking-[1px] text-muted-foreground">
+          Shopping items
+        </Text>
+        <Text className="text-sm text-muted-foreground">{pendingItems.length} active</Text>
+      </View>
 
-    signedInContainer: {
-        flex: 1,
-        width: '100%',
-        backgroundColor: '#000',
-    },
+      {pendingItems.map((item) => (
+        <PendingItemCard key={item.id} item={item} />
+      ))}
 
-    header: {
-        width: '100%',
-        paddingBottom: 16,
-        gap: 12,
-    },
-
-    greeting: {
-        fontSize: 18,
-        color: '#fff',
-        textAlign: 'center',
-    },
-
-    actions: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 12,
-    },
-
-    profileContainer: {
-        flex: 1,
-        width: '100%',
-        overflow: 'hidden',
-    },
-
-    profile: {
-        flex: 1,
-        width: '100%',
-    },
-})
+      <CompletedItems />
+    </ScrollView>
+*/

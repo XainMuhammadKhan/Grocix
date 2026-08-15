@@ -1,3 +1,4 @@
+import { useGroceryStore } from '@/src/store/grocery-store'
 import { Show, useUser } from '@clerk/expo'
 import { UserProfileView } from '@clerk/expo/native'
 import { Link } from 'expo-router'

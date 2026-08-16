@@ -7,15 +7,15 @@ import { useEffect } from "react"
 
 export default function TabsLayout() {
     const { isSignedIn, isLoaded } = useAuth()
-    const {loadItems,items} = useGroceryStore()
+    const { loadItems, items } = useGroceryStore()
 
     const { colorScheme } = useColorScheme()
 
     const isDark = colorScheme == "dark"
     const tabTintColor = isDark ? "hsl(142 70% 54%)" : "hsl(147 75% 33%)"
-    useEffect(()=>{
+    useEffect(() => {
         loadItems()
-    },[])
+    }, [])
 
 
     if (!isLoaded) {
@@ -36,7 +36,7 @@ export default function TabsLayout() {
                 default: "format_list_bulleted",
                 selected: "format_list_bulleted",
             }} />
-            
+
         </NativeTabs.Trigger>
         <NativeTabs.Trigger name="planner">
             <NativeTabs.Trigger.Icon
